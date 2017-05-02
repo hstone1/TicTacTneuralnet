@@ -1,28 +1,33 @@
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by henry on 4/30/2017.
  */
-public class Learner<S> {
+public class Learner<S extends State> {
   private static final double ALPHA = 0.7;
   private LearnableSystem<S> system;
-  private Map<Action<S>, Double> actionValues;
+  private Network network = new Network(9, 100, 9);
 
   public Learner(LearnableSystem<S> system) {
     this.system = system;
-    actionValues = new HashMap<>();
   }
 
   public S playBest (S startingState) {
-    List<Action<S>> actions = system.getActions(startingState);
-    if(!actions.isEmpty()) {
-      actions.sort(Comparator.comparingDouble(a -> -getValue(a)));
-      System.out.println(actions.get(0).getEnd());
+    Action<S>[] actions = system.getActions(startingState);
+    float[] output = network.activate(startingState.state());
+    float max = -100000000;
+    int index = -1;
+    for (int i = 0; i < output.length; i++) {
+      if (actions[i] != null && output[i] > max) {
+        max = output[i];
+        index = i;
+      }
+    }
+
+    if(index != -1) {
+      System.out.println(actions[index].getEnd());
       //playBest(actions.get(0).getEnd());
-      return actions.get(0).getEnd();
+      return actions[index].getEnd();
     }
     return null;
   }
@@ -37,46 +42,76 @@ public class Learner<S> {
   }
 
   private void learn(S startingState) {
-    List<Action<S>> actions = system.getActions(startingState);
-    if(!actions.isEmpty()) {
-      int choice = (int) (Math.random() * actions.size());
-      Action<S> todo = actions.get(choice);
+    Action<S>[] actions = system.getActions(startingState);
+
+    boolean empty = true;
+    for (int i = 0; i < actions.length; i++) {
+      if (actions[i] != null) {
+        empty = false;
+      }
+    }
+
+    if (!empty) {
+      Action<S> todo = null;
+      int rand = 0;
+      while (todo == null) {
+        rand = (int)(Math.random() * actions.length);
+        todo = actions[rand];
+      }
 
       double reward = system.doAction(todo);
-      double oldVal = getValue(todo);
 
-      double maxFuture = -100000000;
-      List<Action<S>> possibleNext = system.getActions(todo.getEnd());
-      for (int i = 0; i < possibleNext.size(); i++) {
-        double val = getValue(possibleNext.get(i));
-        if (val > maxFuture) {
-          maxFuture = val;
+      float[] output = network.activate(todo.getEnd().state());
+      Action<S>[] arr = system.getActions(todo.getEnd());
+      float max = -(1 << 30);
+      for(int i = 0;i < 9;i++){
+        if (arr[i] != null) {
+          if(output[i] > max){
+            max = output[i];
+          }
         }
       }
-      if(possibleNext.isEmpty()){
-        maxFuture = 0;
+      if (max == -(1 << 30)) {
+        max = 0;
       }
 
-      double newVal = oldVal + ALPHA * (reward - maxFuture - oldVal);
-      actionValues.put(todo, newVal);
+      double newVal = reward - max;
+      float[] target = network.activate(todo.getStart().state());
+      for (int i = 0; i < target.length; i++) {
+        if (i == rand) {
+          target[i] = (float) newVal;
+        } else {
+          target[i] = (float) newVal;
+        }
+      }
+      network.train(todo.getStart().state(), target);
 
       learn(todo.getEnd());
     }
   }
 
-  public void print(){
-    for(Map.Entry<Action<S>, Double> weight : actionValues.entrySet()){
-      System.out.println(weight.getKey().getStart() + "      " + weight.getKey()
-          .getEnd() + "     " + weight.getValue());
-    }
-  }
+//  public void print(){
+//    for(Map.Entry<Action<S>, Double> weight : actionValues.entrySet()){
+//      System.out.println(weight.getKey().getStart() + "      " + weight.getKey()
+//          .getEnd() + "     " + weight.getValue());
+//    }
+//  }
+//  double getValue(Action<S> a) {
+//    if (actionValues.containsKey(a)) {
+//      return actionValues.get(a);
+//    } else {
+//      actionValues.put(a, 0.0);
+//      return 0;
+//    }
+//  }
 
-  double getValue(Action<S> a) {
-    if (actionValues.containsKey(a)) {
-      return actionValues.get(a);
-    } else {
-      actionValues.put(a, 0.0);
-      return 0;
+  private <T> List<T> removeNull(T[] t){
+    List<T> l = new LinkedList<>();
+    for (int i = 0;i < t.length;i++) {
+      if (t[i] != null) {
+        l.add(t[i]);
+      }
     }
+    return l;
   }
 }

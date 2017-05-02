@@ -1,0 +1,28 @@
+<component name="libraryTable">
+  <library name="neuroph-adapters-2.93-javadoc">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-adapters-2.93.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-contrib-2.93.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-core-2.93.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-imgrec-2.93.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-ocr-2.93.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-samples-2.93.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-adapters-2.93-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-contrib-2.93-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-core-2.93-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-imgrec-2.93-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-ocr-2.93-javadoc.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-samples-2.93-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-adapters-2.93-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-contrib-2.93-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-core-2.93-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-imgrec-2.93-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-ocr-2.93-sources.jar!/" />
+      <root url="jar://$PROJECT_DIR$/neuroph-2.93b/neuroph-samples-2.93-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

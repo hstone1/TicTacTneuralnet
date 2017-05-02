@@ -1,7 +1,9 @@
+import apple.laf.JRSUIConstants;
+
 /**
  * Created by henry on 4/SIZE0/2017.
  */
-class Board {
+class Board implements State {
   public static final int SIZE = 3;
 
   boolean xturn;
@@ -73,6 +75,14 @@ class Board {
       }
     }
     return false;
+  }
+
+  public float[] state() {
+    float[] state = new float[SIZE * SIZE];
+    for (int i = 0; i < SIZE * SIZE; i++) {
+      state[i] = board[i/SIZE][i%SIZE];
+    }
+    return state;
   }
 
   @Override

@@ -7,8 +7,8 @@ import java.util.List;
  */
 public class TicTacToe implements LearnableSystem<Board> {
   @Override
-  public List<Action<Board>> getActions(Board board) {
-    List<Action<Board>> reachable = new ArrayList<>(9);
+  public Action<Board>[] getActions(Board board) {
+    Action<Board>[] reachable = new Action[9];
     if (board.gameOver()) {
       return reachable;
     }
@@ -17,7 +17,9 @@ public class TicTacToe implements LearnableSystem<Board> {
         Board b = new Board(board);
         b.board[i % Board.SIZE][i / Board.SIZE] = (b.xturn ? 1 : -1);
         b.xturn = !b.xturn;
-        reachable.add(new Action<>(board, b));
+        reachable[i] = new Action<>(board, b);
+      } else {
+        reachable[i] = null;
       }
     }
     return reachable;
